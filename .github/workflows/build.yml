@@ -27,13 +27,16 @@ jobs:
         python3 -m pip install --upgrade setuptools wheel
         python3 -m pip install --user Cython==0.29.36 buildozer
 
-    - name: Accept Android SDK licenses
+    - name: Install Android SDK Commandline Tools
       run: |
-        mkdir -p ~/.android
-        touch ~/.android/repositories.cfg
-        ANDROID_HOME="$HOME/.buildozer/android/platform/android-sdk"
-        mkdir -p "$ANDROID_HOME/cmdline-tools"
-        yes | ~/.local/bin/buildozer android update || true
+        ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
+        mkdir -p $ANDROID_HOME/cmdline-tools
+        cd $ANDROID_HOME/cmdline-tools
+        curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip commandlinetools.zip
+        mkdir -p latest
+        mv cmdline-tools/* latest/ 2>/dev/null || true
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses || true
 
     - name: Build with Buildozer
       run: ~/.local/bin/buildozer -v android debug
