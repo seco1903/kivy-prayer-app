@@ -1,4 +1,5 @@
 [app]
+source.dir = .
 title = Ezan Vakti
 package.name = ezanvakti
 package.domain = org.seco
