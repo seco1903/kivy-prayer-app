@@ -28,7 +28,12 @@ jobs:
         python3 -m pip install --user Cython==0.29.36 buildozer
 
     - name: Accept Android SDK licenses
-      run: mkdir -p ~/.android && touch ~/.android/repositories.cfg && yes | ~/.local/bin/buildozer android update --accept-licenses || true
+      run: |
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        ANDROID_HOME="$HOME/.buildozer/android/platform/android-sdk"
+        mkdir -p "$ANDROID_HOME/cmdline-tools"
+        yes | ~/.local/bin/buildozer android update || true
 
     - name: Build with Buildozer
       run: ~/.local/bin/buildozer -v android debug
