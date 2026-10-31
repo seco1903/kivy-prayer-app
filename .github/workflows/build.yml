@@ -23,8 +23,9 @@ jobs:
             git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config \
             zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev \
             libssl-dev
-        pip install --upgrade pip
-        pip install --user --upgrade Cython==0.29.36 buildozer
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade setuptools wheel
+        python3 -m pip install --user Cython==0.29.36 buildozer
 
     - name: Accept Android SDK licenses
       run: mkdir -p ~/.android && touch ~/.android/repositories.cfg && yes | ~/.local/bin/buildozer android update --accept-licenses || true
