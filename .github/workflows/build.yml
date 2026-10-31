@@ -25,7 +25,8 @@ jobs:
             libssl-dev
         pip install --upgrade pip
         pip install --user --upgrade Cython==0.29.36 buildozer
-
+- name: Accept Android SDK licenses
+      run: mkdir -p ~/.android && touch ~/.android/repositories.cfg && yes | ~/.local/bin/buildozer android updateუქ --accept-licenses || true
     - name: Build with Buildozer
       run: ~/.local/bin/buildozer -v android debug
 
