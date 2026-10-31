@@ -27,19 +27,17 @@ jobs:
         python3 -m pip install --upgrade setuptools wheel
         python3 -m pip install --user Cython==0.29.36 buildozer
 
-    - name: Setup Android SDK and Tools
+    - name: Force Install SDK Commandline Tools to Exact Path
       run: |
         ANDROID_HOME="$HOME/.buildozer/android/platform/android-sdk"
-        mkdir -p "$ANDROID_HOME/cmdline-tools"
-        cd "$ANDROID_HOME/cmdline-tools"
+        mkdir -p "$ANDROID_HOME/tools/bin"
+        cd "$ANDROID_HOME"
         curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
         unzip -q commandlinetools.zip
-        mkdir -p latest
-        mv bin lib source.properties NOTICE.txt latest/ 2>/dev/null || true
-        mkdir -p "$ANDROID_HOME/tools/bin"
-        cp -r latest/bin/* "$ANDROID_HOME/tools/bin/" 2>/dev/null || true
-        export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
-        yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses || true
+        rm -rf "$ANDROID_HOME/tools/bin/*"
+        cp -r cmdline-tools/bin/* "$ANDROID_HOME/tools/bin/"
+        cp -r cmdline-tools/lib "$ANDROID_HOME/tools/"
+        yes | "$ANDROID_HOME/tools/bin/sdkmanager" --licenses --sdk_root="$ANDROID_HOME" || true
 
     - name: Build with Buildozer
       run: ~/.local/bin/buildozer -v android debug
